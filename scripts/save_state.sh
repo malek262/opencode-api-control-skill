@@ -20,8 +20,6 @@ mkdir -p "$SKILL_DIR/state"
 
 # Read config
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/config.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-$(jq -r '.password' "$SKILL_DIR/config.json")}"
-[ "$PASSWORD" = "null" ] && PASSWORD=""
 PROVIDER_ID=$(jq -r '.default_provider' "$SKILL_DIR/config.json")
 MODEL_ID=$(jq -r '.default_model' "$SKILL_DIR/config.json")
 
@@ -30,14 +28,12 @@ jq -n \
   --arg base_url "$BASE_URL" \
   --arg project_path "$PROJECT_PATH" \
   --arg session_id "$SESSION_ID" \
-  --arg password "$PASSWORD" \
   --arg provider "$PROVIDER_ID" \
   --arg model "$MODEL_ID" \
   '{
     base_url: $base_url,
     project_path: $project_path,
     session_id: $session_id,
-    password: $password,
     provider_id: $provider,
     model_id: $model,
     timestamp: now|todate

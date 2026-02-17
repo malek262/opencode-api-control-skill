@@ -15,8 +15,7 @@ fi
 SESSION_ID=$(jq -r '.session_id' "$SKILL_DIR/state/current.json")
 PROJECT_PATH=$(jq -r '.project_path' "$SKILL_DIR/state/current.json")
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/state/current.json")
-PASSWORD=$(jq -r '.password' "$SKILL_DIR/state/current.json")
-[ "$PASSWORD" = "null" ] && PASSWORD=""
+PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
 
 # Get diff
 if [ -n "$PASSWORD" ]; then

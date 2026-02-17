@@ -12,10 +12,16 @@ tags:
   - opencode
 metadata:
   openclaw:
-    bins: 
-      - curl
-      - jq
-      - bash
+    requires:
+      bins: 
+        - curl
+        - jq
+        - bash
+      env:
+        - OPENCODE_SERVER_PASSWORD
+      config:
+        - base_url
+    primaryEnv: OPENCODE_SERVER_PASSWORD
     install: |
       chmod +x scripts/*.sh
       if ! command -v jq &> /dev/null; then
@@ -58,7 +64,7 @@ Read settings from `./config.json`:
 ```bash
 BASE_URL=$(jq -r '.base_url' ./config.json)
 PROJECTS_DIR=$(jq -r '.projects_base_dir' ./config.json)
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-$(jq -r '.password' ./config.json)}"
+# PASSWORD is read strictly from OPENCODE_SERVER_PASSWORD environment variable
 ```
 
 ## Important Agent Responsibilities

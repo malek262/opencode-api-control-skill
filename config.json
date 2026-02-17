@@ -2,6 +2,5 @@
     "base_url": "http://127.0.0.1:4099",
     "projects_base_dir": "/home/user/projects-location",
     "default_provider": "opencode",
-    "default_model": "kimi-k2.5-free",
-    "password": null
+    "default_model": "kimi-k2.5-free"
 }

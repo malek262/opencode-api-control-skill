@@ -17,8 +17,7 @@ fi
 
 # Read config
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/config.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-$(jq -r '.password' "$SKILL_DIR/config.json")}"
-[ "$PASSWORD" = "null" ] && PASSWORD=""
+PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
 
 # Create session
 if [ -n "$PASSWORD" ]; then

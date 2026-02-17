@@ -9,8 +9,7 @@ SKILL_DIR="$(dirname "$SCRIPT_DIR")"
 # Read config
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/config.json")
 PROJECTS_DIR=$(jq -r '.projects_base_dir' "$SKILL_DIR/config.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-$(jq -r '.password' "$SKILL_DIR/config.json")}"
-[ "$PASSWORD" = "null" ] && PASSWORD=""
+PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
 
 # Use any project path for API call
 PROJECT_PATH="${1:-$PROJECTS_DIR}"
