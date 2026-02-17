@@ -408,7 +408,8 @@ fi
 
 ## Quick Command Reference
 ```bash
-# Setup
+# Setup (ensure server is running)
+bash ./scripts/start_server.sh
 bash ./scripts/update_providers.sh
 
 # Create

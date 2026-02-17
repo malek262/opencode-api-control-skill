@@ -85,29 +85,9 @@ You are the **supervisor and communication bridge** between the user and OpenCod
 
 **Correct initialization sequence**:
 ```bash
-# 1. Start server (if not running)
-opencode web --port 4099 &
-SERVER_PID=$!
+# Start server using the robust backgrounding script
+bash ./scripts/start_server.sh
 
-# 2. Wait and verify readiness
-echo "Waiting for OpenCode server to initialize..."
-MAX_ATTEMPTS=30
-ATTEMPT=0
-
-while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
-  if curl -s "http://127.0.0.1:4099/global/health" | jq -e '.healthy' >/dev/null 2>&1; then
-    echo "✓ Server ready"
-    break
-  fi
-  
-  ATTEMPT=$((ATTEMPT + 1))
-  sleep 1
-done
-
-if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
-  echo "❌ Server failed to start"
-  exit 1
-fi
 
 # 3. Now safe to proceed with operations
 bash ./scripts/update_providers.sh
