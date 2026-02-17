@@ -103,8 +103,7 @@ For custom monitoring:
 ```bash
 source ./scripts/load_state.sh
 
-curl -N "$BASE_URL/event?directory=$PROJECT_PATH" \
-  $([ -n "$PASSWORD" ] && echo "-H 'Authorization: Bearer $PASSWORD'")
+curl -N "$BASE_URL/event?directory=$PROJECT_PATH"
 ```
 
 **Output format**:
@@ -229,8 +228,7 @@ For specific event types, modify monitor script or create custom:
 # Example: Only show file changes
 source ./scripts/load_state.sh
 
-curl -N "$BASE_URL/event?directory=$PROJECT_PATH" \
-  $([ -n "$PASSWORD" ] && echo "-H 'Authorization: Bearer $PASSWORD'") | \
+curl -N "$BASE_URL/event?directory=$PROJECT_PATH" | \
 while read -r line; do
   if [[ $line == data:* ]]; then
     TYPE=$(echo "${line#data:}" | jq -r '.payload.type' 2>/dev/null)

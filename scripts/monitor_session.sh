@@ -15,19 +15,14 @@ fi
 SESSION_ID=$(jq -r '.session_id' "$SKILL_DIR/state/current.json")
 PROJECT_PATH=$(jq -r '.project_path' "$SKILL_DIR/state/current.json")
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/state/current.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
+
 
 echo "Monitoring session: $SESSION_ID"
 echo "Press Ctrl+C to stop"
 echo "----------------------------------------"
 
 # Stream events
-if [ -n "$PASSWORD" ]; then
-  curl -N "$BASE_URL/event?directory=$PROJECT_PATH" \
-    -H "Authorization: Bearer $PASSWORD" 2>/dev/null
-else
-  curl -N "$BASE_URL/event?directory=$PROJECT_PATH" 2>/dev/null
-fi | while IFS= read -r line; do
+curl -N "$BASE_URL/event?directory=$PROJECT_PATH" 2>/dev/null | while IFS= read -r line; do
   if [[ $line == data:* ]]; then
     EVENT_DATA="${line#data:}"
     

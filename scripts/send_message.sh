@@ -26,8 +26,7 @@ fi
 SESSION_ID=$(jq -r '.session_id' "$SKILL_DIR/state/current.json")
 PROJECT_PATH=$(jq -r '.project_path' "$SKILL_DIR/state/current.json")
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/state/current.json")
-BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/state/current.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
+
 
 # Use provided or default provider/model
 if [ -z "$PROVIDER_ID" ]; then
@@ -59,18 +58,10 @@ else
 fi
 
 # Send message
-if [ -n "$PASSWORD" ]; then
-  RESPONSE=$(curl -s -X POST \
-    "$BASE_URL/session/$SESSION_ID/message?directory=$PROJECT_PATH" \
-    -H "Authorization: Bearer $PASSWORD" \
-    -H "Content-Type: application/json" \
-    -d "$REQUEST_BODY")
-else
-  RESPONSE=$(curl -s -X POST \
-    "$BASE_URL/session/$SESSION_ID/message?directory=$PROJECT_PATH" \
-    -H "Content-Type: application/json" \
-    -d "$REQUEST_BODY")
-fi
+RESPONSE=$(curl -s -X POST \
+  "$BASE_URL/session/$SESSION_ID/message?directory=$PROJECT_PATH" \
+  -H "Content-Type: application/json" \
+  -d "$REQUEST_BODY")
 
 # Check for errors
 if echo "$RESPONSE" | jq -e '.info.error' >/dev/null 2>&1; then

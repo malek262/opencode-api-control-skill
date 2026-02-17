@@ -15,16 +15,10 @@ fi
 SESSION_ID=$(jq -r '.session_id' "$SKILL_DIR/state/current.json")
 PROJECT_PATH=$(jq -r '.project_path' "$SKILL_DIR/state/current.json")
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/state/current.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
+
 
 # Get diff
-if [ -n "$PASSWORD" ]; then
-  curl -s "$BASE_URL/session/$SESSION_ID/diff?directory=$PROJECT_PATH" \
-    -H "Authorization: Bearer $PASSWORD" | \
-    jq -r '.[] | "\(.status): \(.file) (+\(.additions)/-\(.deletions))"'
-else
-  curl -s "$BASE_URL/session/$SESSION_ID/diff?directory=$PROJECT_PATH" | \
-    jq -r '.[] | "\(.status): \(.file) (+\(.additions)/-\(.deletions))"'
-fi
+curl -s "$BASE_URL/session/$SESSION_ID/diff?directory=$PROJECT_PATH" | \
+  jq -r '.[] | "\(.status): \(.file) (+\(.additions)/-\(.deletions))"'
 
 exit 0

@@ -17,19 +17,12 @@ fi
 
 # Read config
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/config.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
+
 
 # Create session
-if [ -n "$PASSWORD" ]; then
-  RESPONSE=$(curl -s -X POST "$BASE_URL/session?directory=$PROJECT_PATH" \
-    -H "Authorization: Bearer $PASSWORD" \
-    -H "Content-Type: application/json" \
-    -d "{\"title\": \"$TITLE\"}")
-else
-  RESPONSE=$(curl -s -X POST "$BASE_URL/session?directory=$PROJECT_PATH" \
-    -H "Content-Type: application/json" \
-    -d "{\"title\": \"$TITLE\"}")
-fi
+RESPONSE=$(curl -s -X POST "$BASE_URL/session?directory=$PROJECT_PATH" \
+  -H "Content-Type: application/json" \
+  -d "{\"title\": \"$TITLE\"}")
 
 # Check for errors
 if echo "$RESPONSE" | jq -e '.errors' >/dev/null 2>&1; then

@@ -1,5 +1,5 @@
 # OpenCode API Control Skill
-
+version: 1.1.0
 A high-performance orchestration skill for controlling the **Open Code CLI** through its native web server API. This skill acts as a professional bridge between autonomous agents and development environments.
 
 ## 🚀 Overview
@@ -18,9 +18,6 @@ This skill leverages the built-in local web server feature of OpenCode to manage
   ```bash
   opencode web --hostname 0.0.0.0 --port 4099
   ```
-
-> [!CAUTION]
-> If `OPENCODE_SERVER_PASSWORD` is not set, the server will be unsecured. This is fine for local use, but it should definitely be set when enabling network access.
 
 ## Why I built this
 Developed by **Malek RSH**.

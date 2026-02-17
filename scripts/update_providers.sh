@@ -9,18 +9,12 @@ SKILL_DIR="$(dirname "$SCRIPT_DIR")"
 # Read config
 BASE_URL=$(jq -r '.base_url' "$SKILL_DIR/config.json")
 PROJECTS_DIR=$(jq -r '.projects_base_dir' "$SKILL_DIR/config.json")
-PASSWORD="${OPENCODE_SERVER_PASSWORD:-}"
 
 # Use any project path for API call
 PROJECT_PATH="${1:-$PROJECTS_DIR}"
 
 # Fetch providers
-if [ -n "$PASSWORD" ]; then
-  PROVIDERS=$(curl -s -H "Authorization: Bearer $PASSWORD" \
-    "$BASE_URL/provider?directory=$PROJECT_PATH")
-else
-  PROVIDERS=$(curl -s "$BASE_URL/provider?directory=$PROJECT_PATH")
-fi
+PROVIDERS=$(curl -s "$BASE_URL/provider?directory=$PROJECT_PATH")
 
 # Filter to connected + opencode only
 echo "$PROVIDERS" | jq '{

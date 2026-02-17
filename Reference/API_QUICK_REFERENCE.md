@@ -101,11 +101,7 @@ curl -s -X DELETE "http://127.0.0.1:4099/session/ses_123?directory=$PROJECT_PATH
 
 ## Authentication Patterns
 
-### With Password
-All requests when `OPENCODE_SERVER_PASSWORD` is set:
-```bash
-curl -s -H "Authorization: Bearer $OPENCODE_SERVER_PASSWORD" "$URL"
-```
+
 
 ### Without Password
 Normal curl requests:
@@ -220,7 +216,7 @@ curl -s "http://127.0.0.1:4099/session/ses_123/message?directory=$PROJECT_PATH&l
 - `200` - Success
 - `204` - Success (no content)
 - `400` - Bad request (validation error)
-- `401` - Unauthorized (wrong/missing password)
+
 - `404` - Not found (session/message doesn't exist)
 - `500` - Server error
 

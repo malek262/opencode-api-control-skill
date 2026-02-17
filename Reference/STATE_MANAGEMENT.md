@@ -18,7 +18,7 @@ OpenCode skill maintains session state in `./state/` directory. State persistenc
   "base_url": "http://127.0.0.1:4099",
   "project_path": "/home/user/projects/my-app",
   "session_id": "ses_abc123xyz",
-  "password": "my-password",
+
   "provider_id": "opencode",
   "model_id": "gpt-5.1-codex",
   "timestamp": "2026-02-16T10:30:00Z"
@@ -36,7 +36,7 @@ bash ./scripts/save_state.sh "$SESSION_ID" "$PROJECT_PATH"
 
 **What it does**:
 - Saves session ID and project path
-- Stores authentication info
+
 - Records current provider/model
 - Adds timestamp
 
@@ -51,7 +51,7 @@ source ./scripts/load_state.sh
 - `$BASE_URL` - API endpoint
 - `$SESSION_ID` - Active session
 - `$PROJECT_PATH` - Project directory
-- `$PASSWORD` - Authentication token
+
 - `$PROVIDER_ID` - Current provider
 - `$MODEL_ID` - Current model
 
@@ -308,19 +308,5 @@ State files are tiny JSON files containing only:
 
 **No large data stored** - actual session content lives in OpenCode server.
 
-## Security Note
-
-`password` field in state files contains authentication token. Keep state directory secure:
-```bash
-# Recommended permissions
-chmod 700 ./state
-chmod 600 ./state/*.json
-```
-
-Consider adding to `.gitignore`:
-```
-state/
-!state/.gitkeep
-```
 ---
 **Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode-CLI-Controller](https://github.com/malek262/opencode-api-control-skill)

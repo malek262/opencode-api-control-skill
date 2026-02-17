@@ -1,7 +1,7 @@
 ---
 name: OpenCode-CLI-Controller
 description: A powerful skill to control Open Code CLI via a local web server API. Allows executing commands, managing sessions, and automating code generation remotely in the local network.
-version: 1.0.0
+version: 1.1.0
 emoji: 🎛️
 author: Malek
 tags: 
@@ -17,11 +17,7 @@ metadata:
         - curl
         - jq
         - bash
-      env:
-        - OPENCODE_SERVER_PASSWORD
-      config:
-        - base_url
-    primaryEnv: OPENCODE_SERVER_PASSWORD
+
     install: |
       chmod +x scripts/*.sh
       if ! command -v jq &> /dev/null; then
@@ -64,7 +60,6 @@ Read settings from `./config.json`:
 ```bash
 BASE_URL=$(jq -r '.base_url' ./config.json)
 PROJECTS_DIR=$(jq -r '.projects_base_dir' ./config.json)
-# PASSWORD is read strictly from OPENCODE_SERVER_PASSWORD environment variable
 ```
 
 ## Important Agent Responsibilities
@@ -250,7 +245,6 @@ PROJECT_PATH="$PROJECTS_DIR/$PROJECT_NAME"
 ```bash
 # Create session in project directory
 RESPONSE=$(curl -s -X POST "$BASE_URL/session?directory=$PROJECT_PATH" \
-  $([ -n "$PASSWORD" ] && echo "-H 'Authorization: Bearer $PASSWORD'") \
   -H "Content-Type: application/json" \
   -d '{"title": "Project Session"}')
 
@@ -276,7 +270,6 @@ bash ./scripts/save_state.sh "$SESSION_ID" "$PROJECT_PATH"
 source ./scripts/load_state.sh
 
 curl -s -X POST "$BASE_URL/session/$SESSION_ID/message?directory=$PROJECT_PATH" \
-  $([ -n "$PASSWORD" ] && echo "-H 'Authorization: Bearer $PASSWORD'") \
   -H "Content-Type: application/json" \
   -d "{
     \"model\": {
@@ -467,14 +460,12 @@ bash ./scripts/get_diff.sh
 Get file content:
 ```bash
 curl -s "$BASE_URL/file/content?directory=$PROJECT_PATH&path=src/App.tsx" \
-  $([ -n "$PASSWORD" ] && echo "-H 'Authorization: Bearer $PASSWORD'") | \
   jq -r '.content'
 ```
 
 List directory:
 ```bash
 curl -s "$BASE_URL/file?directory=$PROJECT_PATH&path=src" \
-  $([ -n "$PASSWORD" ] && echo "-H 'Authorization: Bearer $PASSWORD'") | \
   jq -r '.[] | "\(.type): \(.path)"'
 ```
 
@@ -495,18 +486,8 @@ fi
 
 ## Authentication
 
-Scripts automatically handle authentication:
+This skill assumes the OpenCode server is running in a trusted local environment and does not use password authentication by default.
 
-**With password**:
-```bash
-export OPENCODE_SERVER_PASSWORD="your-password"
-# All scripts will use Bearer authentication
-```
-
-**Without password**:
-```bash
-# Scripts work normally without authentication headers
-```
 
 ## Quick Reference
 
@@ -527,12 +508,12 @@ export OPENCODE_SERVER_PASSWORD="your-password"
 
 ## Important Notes
 
-1. **Always run from skill directory**: Scripts use relative paths
-2. **Update providers at workflow start**: Ensures cache is fresh
-3. **Create projects in PROJECTS_BASE_DIR**: Configured in config.json
-4. **Each session belongs to one project directory**: Don't mix
-5. **Load state before curl commands**: Ensures variables are set
-6. **Scripts handle authentication**: No need to add headers manually
+1.  **Always run from skill directory**: Scripts use relative paths
+2.  **Update providers at workflow start**: Ensures cache is fresh
+3.  **Create projects in PROJECTS_BASE_DIR**: Configured in config.json
+4.  **Each session belongs to one project directory**: Don't mix
+5.  **Load state before curl commands**: Ensures variables are set
+6.  **Scripts handle authentication**: No need to add headers manually
 
 ## Troubleshooting
 
@@ -555,11 +536,6 @@ jq -r '.providers[] | .id' ./providers.json
 - Missing `directory` parameter
 - Check: Are you using full PROJECT_PATH?
 
-**"Authorization failed"**:
-```bash
-# Set password if required
-export OPENCODE_SERVER_PASSWORD="password"
-```
 
 ## Advanced Usage
 
