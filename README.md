@@ -32,3 +32,10 @@ After trying different approaches like reverse proxies, I started digging into t
 ---
 *Built for simplicity and making local agents more useful.*
 
+## 🤝 Contributions & Support
+This project is open for improvement! If you have suggestions, find bugs, or want to contribute new scripts/patterns:
+- **Repository**: [malek262/opencode-api-control-skill](https://github.com/malek262/opencode-api-control-skill)
+- **Issues**: Feel free to open an issue on GitHub for any bugs or feature requests.
+- **Pull Requests**: Contributions are always welcome.
+
+**Author**: [Malek RSH](https://github.com/malek262)
