@@ -50,7 +50,7 @@ This skill provides a set of tools to programmatically interface with the Open C
 - User needs to manage multiple OpenCode sessions or monitor tasks
 
 ## Prerequisites
-1. OpenCode server running: `opencode web --port 4099`
+1. OpenCode server running (Preferred: `bash ./scripts/start_server.sh`)
 2. Configuration file exists: `./config.json`
 3. Required scripts in `./scripts/` directory
 

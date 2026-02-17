@@ -8,6 +8,18 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_DIR="$(dirname "$SCRIPT_DIR")"
 LOG_FILE="$SKILL_DIR/opencode_server.log"
 PORT=4099
+OPENCODE_BIN="$HOME/.opencode/bin/opencode"
+
+# Check if binary exists
+if [ ! -f "$OPENCODE_BIN" ]; then
+    # Fallback to PATH if not in the default location
+    if command -v opencode >/dev/null 2>&1; then
+        OPENCODE_BIN="opencode"
+    else
+        echo "❌ Error: opencode binary not found at $OPENCODE_BIN or in PATH." >&2
+        exit 1
+    fi
+fi
 
 # Check if server is already running
 if curl -s "http://127.0.0.1:$PORT/global/health" | jq -e '.healthy' >/dev/null 2>&1; then
@@ -19,7 +31,7 @@ echo "Starting OpenCode server on port $PORT..."
 
 # Use 'script' to provide a fake TTY and 'nohup' to background it
 # This handles the SIGKILL issue when started from non-interactive shells
-nohup script -q -c "opencode web --port $PORT" /dev/null > "$LOG_FILE" 2>&1 &
+nohup script -q -c "$OPENCODE_BIN web --port $PORT" /dev/null > "$LOG_FILE" 2>&1 &
 
 echo "Waiting for server to initialize..."
 MAX_ATTEMPTS=45
