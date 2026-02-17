@@ -230,4 +230,4 @@ curl -s "http://127.0.0.1:4099/session/ses_123/message?directory=$PROJECT_PATH&l
 - Model provider limits apply (e.g., Anthropic, OpenAI)
 - Event streams can be resource-intensive
 ---
-**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode CLI Controller](https://github.com/malek262/opencode-api-control-skill)
+**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode-CLI-Controller](https://github.com/malek262/opencode-api-control-skill)

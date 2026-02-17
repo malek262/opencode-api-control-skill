@@ -431,4 +431,4 @@ bash ./scripts/load_project.sh "name"
 source ./scripts/load_state.sh
 ```
 ---
-**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode CLI Controller](https://github.com/malek262/opencode-api-control-skill)
+**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode-CLI-Controller](https://github.com/malek262/opencode-api-control-skill)

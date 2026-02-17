@@ -1,5 +1,5 @@
 ---
-name: OpenCode CLI Controller
+name: OpenCode-CLI-Controller
 description: A powerful skill to control Open Code CLI via a local web server API. Allows executing commands, managing sessions, and automating code generation remotely in the local network.
 version: 1.0.0
 emoji: 🎛️
@@ -593,4 +593,4 @@ opencode-api-control/
     └── API_QUICK_REFERENCE.md
 ```
 ---
-**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode CLI Controller](https://github.com/malek262/opencode-api-control-skill)
+**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode-CLI-Controller](https://github.com/malek262/opencode-api-control-skill)

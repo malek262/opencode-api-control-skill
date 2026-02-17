@@ -357,4 +357,4 @@ select_provider.sh "gemini" "3-pro"      # Not just "pro"
 ❌ Don't use outdated cache
 ❌ Don't forget OpenCode free option
 ---
-**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode CLI Controller](https://github.com/malek262/opencode-api-control-skill)
+**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode-CLI-Controller](https://github.com/malek262/opencode-api-control-skill)

@@ -251,4 +251,4 @@ done
 | 60+ seconds | Highly recommended |
 | Unknown duration | Always monitor |
 ---
-**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode CLI Controller](https://github.com/malek262/opencode-api-control-skill)
+**Author:** [Malek RSH](https://github.com/malek262) | **Repository:** [OpenCode-CLI-Controller](https://github.com/malek262/opencode-api-control-skill)
