@@ -3,7 +3,7 @@ name: OpenCode-CLI-Controller
 description: A powerful skill to control Open Code CLI via a local web server API. Allows executing commands, managing sessions, and automating code generation remotely in the local network.
 version: 1.1.0
 emoji: 🎛️
-author: Malek
+author: Malek-Rsh
 tags: 
   - cli
   - api
@@ -164,6 +164,31 @@ fi
 - ✅ Only check final results after confirmation of completion
 - ✅ Let OpenCode agents work independently - don't micromanage
 
+## Task Initiation Protocol
+
+Before starting any task (new project, code analysis, debugging, etc.), **ask the user in ONE message**:
+
+> I'll help you with that. Two quick questions:
+> 1. **Provider**: Use default from config, or specify a provider (opencode, anthropic, gemini, etc.)?
+> 2. **Monitoring**: 
+>    - **Standard** (recommended): Send task → wait for completion summary → notify you when done (saves tokens)
+>    - **Real-time**: Show live progress, file edits, and events as they happen (uses more tokens)
+>
+> How would you like to proceed?
+
+**Default if not specified**: Use config defaults + Standard mode.
+
+### Why This Matters
+- **Standard mode**: Uses `send_message.sh` → waits → shows final summary. Efficient for most tasks.
+- **Real-time mode**: Uses `monitor_session.sh` with event streaming. Good for long/complex tasks where you want visibility.
+
+### Example Response Handling
+- "Default provider, standard mode" → Proceed immediately
+- "Use Claude Sonnet, real-time" → Run `select_provider.sh` then `monitor_session.sh`
+- "Gemini Pro" → Find provider + ask monitoring preference if not specified
+
+---
+
 ### Task Completion Verification
 
 When a task completes, get summary via:
@@ -222,16 +247,7 @@ PROJECT_PATH="$PROJECTS_DIR/$PROJECT_NAME"
 ```
 
 ### Step 4: Create Session
-```bash
-# Create session in project directory
-RESPONSE=$(curl -s -X POST "$BASE_URL/session?directory=$PROJECT_PATH" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Project Session"}')
-
-SESSION_ID=$(echo "$RESPONSE" | jq -r '.id')
-```
-
-**Or use script**:
+Create a session in the project directory using the provided script:
 ```bash
 SESSION_ID=$(bash ./scripts/create_session.sh "$PROJECT_PATH" "Session Title")
 ```
@@ -243,33 +259,12 @@ bash ./scripts/save_state.sh "$SESSION_ID" "$PROJECT_PATH"
 ```
 
 ### Step 6: Send Message
-
-**Direct curl**:
+Use the provided script to send prompts to the AI:
 ```bash
-# Load state first
-source ./scripts/load_state.sh
-
-curl -s -X POST "$BASE_URL/session/$SESSION_ID/message?directory=$PROJECT_PATH" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"model\": {
-      \"providerID\": \"opencode\",
-      \"modelID\": \"gpt-5.1-codex\"
-    },
-    \"parts\": [{
-      \"type\": \"text\",
-      \"text\": \"Your prompt here\"
-    }]
-  }" | jq -r '.parts[] | select(.type=="text") | .text'
-```
-
-**Or use script**:
-```bash
+# Use defaults from config
 bash ./scripts/send_message.sh "Your prompt here"
-```
 
-With custom provider:
-```bash
+# Or use a specific provider and model
 bash ./scripts/send_message.sh "Your prompt" "anthropic" "claude-sonnet-4-5"
 ```
 
@@ -290,32 +285,17 @@ bash ./scripts/send_message.sh "Create app"
 ```
 
 ### User Specifies Provider
-When user says "use Gemini Pro" or "with Claude Sonnet":
+When the user specifies a provider (e.g., "use Gemini Pro" or "with Claude Sonnet"), use the search script:
 ```bash
-# Extract provider from user request
-PROVIDER="gemini"  # or "anthropic", "openai", etc.
-
-# Find in connected providers
-PROVIDER_ID=$(jq -r --arg p "$PROVIDER" \
-  '.providers[] | select(.id==$p or (.name | ascii_downcase | contains($p))) | .id' \
-  ./providers.json | head -1)
-
-# Find model
-MODEL_ID=$(jq -r --arg p "$PROVIDER_ID" \
-  '.providers[] | select(.id==$p) | .models[] | select(contains("pro"))' \
-  ./providers.json | head -1)
-
-# Send with selected provider
-bash ./scripts/send_message.sh "Your prompt" "$PROVIDER_ID" "$MODEL_ID"
-```
-
-**Or use search script**:
-```bash
-bash ./scripts/select_provider.sh "gemini" "pro"
+# Search for provider and model hints
+RESULT=$(bash ./scripts/select_provider.sh "gemini" "pro")
 # Returns: gemini gemini-3-pro
 
-# Then use returned values
-bash ./scripts/send_message.sh "Your prompt" "gemini" "gemini-3-pro"
+# Extract and use the returned values
+PROVIDER_ID=$(echo "$RESULT" | cut -d' ' -f1)
+MODEL_ID=$(echo "$RESULT" | cut -d' ' -f2)
+
+bash ./scripts/send_message.sh "Your prompt" "$PROVIDER_ID" "$MODEL_ID"
 ```
 
 ## Agent Selection
